@@ -19,11 +19,13 @@
         
         <h1>Hello!</h1>
 
-        <p>What's your name? <input type="text" id="name"></p>
+        <form>
+            <label for="name">What's your name?</label>
+            <input type="text" id="name" style="margin-bottom: 2.5%;">
+            <br>
 
-        <input type="button" value="Press me!" onclick="greeting()">
-
-        <br>
+            <input type="button" value="Press me!" onclick="greeting()">
+        </form>
         
         <p id="greeting"></p>
 
