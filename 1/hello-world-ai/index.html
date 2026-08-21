@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hello World AI</title>
+    <meta name="description" content="Simple Hello World site with name prompt">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main class="container">
+      <h1 class="hello">Hello!</h1>
+
+      <form id="nameForm" class="name-form" onsubmit="return false;" aria-describedby="nameHelp">
+        <div class="field">
+          <label for="firstName">First name</label>
+          <input id="firstName" name="firstName" type="text" placeholder="Enter first name" autocomplete="given-name">
+        </div>
+
+        <div class="field">
+          <label for="lastName">Last name</label>
+          <input id="lastName" name="lastName" type="text" placeholder="Enter last name" autocomplete="family-name">
+        </div>
+
+        <div class="actions">
+          <button id="submitBtn" type="button">Say hello</button>
+        </div>
+
+        <p id="nameHelp" class="sr-only">Enter your first and last name and press the Say hello button to be welcomed.</p>
+      </form>
+
+      <p id="welcome" class="welcome" aria-live="polite" hidden></p>
+    </main>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
