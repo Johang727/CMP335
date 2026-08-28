@@ -18,7 +18,7 @@
         <![endif]-->
 
         <h1>Flexbox Example</h1>
-        <p>this is some text</p>
+        <p><i>"If you want a life of crime, go out and buy a fake finger and stick it onto your hand so that everyone says it will be AI generated."</i> - Machine Learning 11/07/2025</p>
 
         <div class="flexbox">
             <div style="background: #aeaeae;">
@@ -28,22 +28,25 @@
             
             <div style="background: #c7c7c7">
                 <h2>Entry 2 (Image)</h2>
-                <a href="images/nom.jpg"><img src="images/nom.jpg" style="max-width:250px"></a>
+                <a href="images/nom.jpg"><img src="images/nom.jpg" style="max-width: 100%;"></a>
             </div>
 
             <div style="background: #dddddd">
                 <h2>Entry 3 (Video)</h2>
-                <video src="images/hi_squidward.mp4" style="max-width: 250px;" controls></video>
+                <video src="images/hi_squidward.mp4" style="max-width: 100%;" controls>
+                    Your browser does not support video :c
+                </video>
             </div>
             <div style="background: #eaeaea">
                 <h2>Entry 4 (API)</h2>
 
-                <p>Click this button to get your coordinates.</p>
+                <p id="geo_container">Click this button to get your coordinates.</p>
 
-                <input type="button" value="Try it!">
+                <input type="button" value="Try it!" onclick="get_location()">
             </div>
         </div>
 
+        <script src="script.js"></script>
 
     </body>
 </html>
