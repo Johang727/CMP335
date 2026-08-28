@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flexbox Example</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="page">
+      <h1>Flexbox Example</h1>
+
+      <div class="flexbox" aria-label="Responsive flexbox layout">
+        <article class="flex-cell cell-link">
+          <h2>Link</h2>
+          <p>Visit a fun webpage:</p>
+          <a href="https://www.youtube.com/shorts/-7l8QcYhd9w" target="_blank" rel="noreferrer noopener">Watch a short video</a>
+        </article>
+
+        <article class="flex-cell cell-image">
+          <h2>Image</h2>
+          <img src="images/nom.jpg" alt="A cartoon-style person smiling while eating a snack" />
+        </article>
+
+        <article class="flex-cell cell-video">
+          <h2>Video</h2>
+          <video controls preload="metadata">
+            <source src="images/hi_squidward.mp4" type="video/mp4" />
+            Your browser does not support HTML5 video.
+          </video>
+        </article>
+
+        <article class="flex-cell cell-geo">
+          <h2>Geolocation</h2>
+          <p id="geo-status">Click the button to find your location.</p>
+          <button type="button" id="geo-button">Get My Location</button>
+        </article>
+      </div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
