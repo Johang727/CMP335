@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Tournament Entry Form</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <h2>Tournament Entry</h2>
+
+        <form onsubmit="return InformSuccess(event)">
+            <label for="username">Username*:</label>
+            <input type="text" id="username" required>
+            
+            <p><b>Events To Compete In*:</b></p>
+            
+            <input type="checkbox" id="ppt-svs" onclick="ToggleSkillRating()">
+            <label for="ppt-svs">Puyo Puyo Tetris 1 - Swap Versus</label><br>
+            <input type="checkbox" id="ppt-sduo" onclick="ToggleSkillRating()">
+            <label for="ppt-sduo">Puyo Puyo Tetris 1 - Swap Duos</label><br>
+
+            <input type="checkbox" id="tec-vs" onclick="ToggleSkillRating()">
+            <label for="tec-vs">Tetris Effect: Connected - Zone Battle</label><br>
+            <input type="checkbox" id="tec-cvs" onclick="ToggleSkillRating()">
+            <label for="tec-cvs">Tetris Effect: Connected - Connected VS</label><br>
+
+            <input type="checkbox" id="tetr-tl" onclick="ToggleSkillRating()">
+            <label for="tetr-tl">TETR.IO - Tetra League</label><br><br>
+        
+            <div id="ppt-rating-section" style="display: none;">
+                <label for="ppt-rating">TE:C Rating*: <a title="PPT Matchmaking is dead, only enter your PPT Swap rating if absolutely necessary."><u>?</u></a></label>
+                <input type="number" id="ppt-rating">
+            </div>
+
+
+            <div id="tec-rating-section" style="display: none;">
+                <label for="tec-rating">TE:C Rating*:</label>
+                <input type="number" id="tec-rating">
+            </div>
+
+
+            <div id="tetrio-rating-section" style="display: none;">
+                <label for="tetrio-rating">TETR.IO Rating*:</label>
+                <input type="number" id="tetrio-rating">
+            </div>
+
+            
+
+            <label for="preferred-system">Preferred Platform:</label>
+            <select id="preferred-system">
+                <option selected>No Preference</option>
+                <option>PC</option>
+                <option>PlayStation</option>
+                <option>Xbox</option>
+                <option>Switch</option>
+            </select>
+
+            <p><b>T-Shirt Size:</b></p>
+            <input type="radio" name="shirt" id="XS-Shirt">
+            <label for="XS-Shirt">XS</label>
+            <input type="radio" name="shirt" id="S-Shirt">
+            <label for="S-Shirt">S</label>
+            <input type="radio" name="shirt" id="M-Shirt">
+            <label for="M-Shirt">M</label>
+            <input type="radio" name="shirt" id="L-Shirt">
+            <label for="L-Shirt">L</label>
+            <input type="radio" name="shirt" id="XL-Shirt">
+            <label for="XL-Shirt">XL</label>
+            <input type="radio" name="shirt" id="2XL-Shirt">
+            <label for="2XL-Shirt">2XL</label>
+            <input type="radio" name="shirt" id="3XL-Shirt">
+            <label for="3XL-Shirt">3XL</label>
+            <br>
+
+            <input type="radio" name="shirt" id="No-Shirt" checked>
+            <label for="No-Shirt">I Don't Want A Shirt</label><br><br>
+
+
+            <input type="submit" value="Submit">
+
+            <p style="text-align: right; margin-bottom: 0px; color:darkred">* Required</p>
+
+        </form>
+        <script src="script.js"></script>
+
+
+    </body>
+</html>

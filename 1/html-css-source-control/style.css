@@ -1,11 +1,28 @@
-.flexbox {
-  background-color: #f1f1f1;
-  flex-wrap: wrap;
-  display: flex;
+* {
+  box-sizing: border-box;
 }
 
-.flexbox div {
-  flex-direction: column;
-  padding: 10px;
-  flex: 1 1 200px;
+/* Container for flexboxes */
+.flexboxrow {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Create four equal entries in myflexbox */
+.flexboxcol {
+  flex: 25%;
+  padding: 20px;
+}
+
+@media screen and (max-width: 992px) {
+  .flexboxcol{
+    flex: 50%;
+  }
+}
+
+/* Media query - on screens that are 600px wide or less, make the columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .flexboxrow {
+    flex-direction: column;
+  }
 }
