@@ -54,7 +54,13 @@ const UserField = document.getElementById("username");
 
 
 function InformSuccess(event) {
-    event.preventDefault();
+    event.preventDefault(); // Stop form submission
+    const recaptchaResponse = grecaptcha.getResponse();
+
+    if (recaptchaResponse.length === 0) {
+        alert("Please complete the reCAPTCHA challenge before submitting.");
+        return false;
+    }
     alert(`Thanks, ${UserField.value}! Good luck!`); 
     return true;
 }

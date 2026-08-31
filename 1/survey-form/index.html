@@ -11,6 +11,8 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="style.css">
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -64,6 +66,8 @@
                 <option>PlayStation</option>
                 <option>Xbox</option>
                 <option>Switch</option>
+                <option>Mobile</option>
+                <option>VR</option>
             </select>
 
             <p><b>T-Shirt Size:</b></p>
@@ -86,6 +90,8 @@
             <input type="radio" name="shirt" id="No-Shirt" checked>
             <label for="No-Shirt">I Don't Want A Shirt</label><br><br>
 
+            <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+            <br>
 
             <input type="submit" value="Submit">
 
@@ -93,6 +99,7 @@
 
         </form>
         <script src="script.js"></script>
+        
 
 
     </body>
