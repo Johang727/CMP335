@@ -1,0 +1,121 @@
+body {
+    font-family: monospace;
+    background-color: rgb(85, 35, 119);
+    display: grid;
+    justify-items: center;
+    margin: 30px;
+    font-size: large;
+}
+
+
+div.top {
+    color: #003366;
+    background: rgb(242, 213, 249);
+    border: 2px solid rgb(236, 234, 236);
+    border-radius: 10px;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+}
+
+
+
+button {
+    width: 100%;
+    padding: 8px;
+    border-radius: 10px;
+    background: rgb(28, 135, 51);
+    color:white;
+    margin-top:5px;
+}
+
+img {
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+
+label {
+    font-weight: bold;
+}
+
+input[type="text"],
+select,
+textarea {
+    width: 95%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+input[type="number"],
+select,
+textarea {
+    width: 95%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+select {
+    width: 100%;
+}
+
+
+input[type="submit"] {
+    background-color: #2b0066;
+    color: white;
+    font-weight: bold;
+    padding: 10px 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%
+}
+
+input[type="submit"]:hover {
+    background-color: #0055aa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Container for flexboxes */
+.flexboxrow {
+    display: flex;
+    flex-wrap: wrap;
+    color: #003366;
+    background: rgb(242, 213, 249);
+    border: 2px solid rgb(236, 234, 236);
+    border-radius: 10px;
+    padding: 20px;
+    width: 100%;
+}
+
+/* Create four equal entries in myflexbox */
+.flexboxcol {
+    flex: 25%;
+    padding: 20px;
+    border-radius: 10px;
+    object-fit: cover;
+
+}
+
+@media screen and (max-width: 992px) {
+  .flexboxcol{
+    flex: 50%;
+  }
+}
+
+/* Media query - on screens that are 600px wide or less, make the columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .flexboxrow {
+    flex-direction: column;
+  }
+}
