@@ -2,27 +2,33 @@ function validateANDadd() {
     // place the values in the form into variables
     const range_lower_container = document.forms["myForm"]["range_lower"];
     const range_upper_container = document.forms["myForm"]["range_upper"];
-
-    const range_lower = +range_lower_container.value;
-    const range_upper = +range_upper_container.value;
-
-    const new_number = +document.forms["myForm"]["num_to_add"].value;
-
-    // due to how js was interpretting these values, i needed to add + before it to force it to think of them as numbers, rather than strings
-    // 2 > 100 for example
     
     // validate that something was entered as a word
-    if (new_number == "") {
+
+    let range_lower = range_lower_container.value;
+    let range_upper = range_upper_container.value;
+
+    let new_number = document.forms["myForm"]["num_to_add"].value;
+
+    if (new_number === "") {
         // no number was entered
         alert("Please enter a number!");
         return false;
     }
-    if ((range_lower == "") || (range_upper == "")) {
+    if ((range_lower === "") || (range_upper === "")) {
         alert("One of the ranges is empty!");
         return false;
     }
+
+    // due to how js was interpretting these values, i needed to add + before it to force it to think of them as numbers, rather than strings
+    // 2 > 100 for example
+    range_lower = Number(range_lower);
+    range_upper = Number(range_upper);
+    new_number = Number(new_number);
+
+
     // validate if the number is in the range specified
-    else if ((new_number < range_lower) || (new_number > range_upper)) {
+    if ((new_number < range_lower) || (new_number > range_upper)) {
         // number is too big or too small
         alert(`Please enter a value in between ${range_lower} - ${range_upper}`);
         return false;
@@ -63,9 +69,9 @@ function validateANDadd() {
         nums.sort(function(a, b) {
             return a - b;
         });
-        console.log(nums);
+        // console.log(nums);
 
-        let median; // define median here so it can be used later
+        let median; // define median here so it can be used later  
 
         // number count is even
         if (nums.length % 2 == 0) {
