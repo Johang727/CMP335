@@ -80,6 +80,8 @@ function algo_2(word_chk) {
 // Retrieved 2026-09-25, License - CC BY-SA 4.0
 function algo_3(word_chk) {
 
+
+    // recursive way of doing it
     function reverse(s) {
     return (s === '') ? '' : reverse(s.substr(1)) + s.charAt(0);
     }
@@ -92,4 +94,17 @@ function algo_3(word_chk) {
     } else {
         return false;
     }
+}
+
+function clear_1() {
+    const algo_1_list = document.getElementById("algo-1-list");
+    algo_1_list.innerHTML = "";
+}
+function clear_2() {
+    const algo_2_list = document.getElementById("algo-2-list");
+    algo_2_list.innerHTML = "";
+}
+function clear_3() {
+    const algo_3_list = document.getElementById("algo-3-list");
+    algo_3_list.innerHTML = "";
 }
