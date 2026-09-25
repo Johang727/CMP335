@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palindrome Checker</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="main.js"></script>
+</head>
+<body>
+    <h1>Palindrome Checker</h1>
+    <div class="myflexboxRow">
+        <div class="myflexboxColumn">
+            <label for="new-word">Word to check:</label>
+            <input type="text" id="new-word"><br />
+
+            <p style="margin-bottom: 0;">Select Algorithm:</p>
+            <input type="radio" id="algo-1-sw" name="algo-sw" value="1" checked>
+            <label for="algo-1-sw">1</label>
+            <input type="radio" id="algo-2-sw" name="algo-sw" value="2">
+            <label for="algo-2-sw">2</label>
+            <input type="radio" id="algo-3-sw" name="algo-sw" value="3">
+            <label for="algo-3-sw">3</label><br>
+                
+
+            <label for="case-sens-sw">Case Sensitive? </label>
+            <input type="checkbox" id="case-sens-sw"><br><br>
+            <input type="button" value="Check & add to list!" onclick="check_and_add()">
+        </div>
+        <div class="myflexboxColumn">
+            <h2>Algorithm 1</h2>
+            <h3>(word: palindrome?)</h3>
+            <table id="algo-1-list">
+            </table>
+        </div>
+        <div class="myflexboxColumn">
+            <h2>Algorithm 2</h2>
+            <h3>(word: palindrome?)</h3>
+            <table id="algo-2-list">
+            </table>
+        </div>
+        <div class="myflexboxColumn">
+            <h2>Algorithm 3</h2>
+            <h3>(word: palindrome?)</h3>
+            <table id="algo-3-list">
+            </table>
+        </div>
+    </div>    
+</body>
+</html>
