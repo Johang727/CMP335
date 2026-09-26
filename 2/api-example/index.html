@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>TETR.IO API</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+
+        <div class="container p-3">
+            <h1  class="s-0">Recent Tetra League Stats</h1>
+            <hr>
+
+            <div class="container">
+                <label for="username"><b>Enter Your Username or ID:</b></label>
+                <input type="text" id="username">
+                <button onclick="get_information()">Go!</button>
+            </div>
+            <hr>
+
+
+            <!-- Current Standing -->
+            <h2>Current Standing</h2>
+            <div class="container p-2">
+                <div class="row">
+                    <div class="col-6 d-flex align-items-center gap-3">
+                        <img id="tetra-rank-img" src="https://tetr.io/res/league-ranks/z.png" style="max-width: 20%;">
+                        
+                        <div class="container">
+                            <!-- fs = font size -->
+                            <div class="fs-4 fw-bold" id="tetra-rating"><b>? TR</b></div>
+                            <div class="text-muted fs-6" id="tetra-placement"># ?</div>
+                            <div class="text-success fs-6" id="rating-expiration">Rating Unknown</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <p><b>Percentile: </b><span id="percentile">?</span></p>
+                        <p><b>Glicko: </b><span id="glicko">?</span> &plusmn; <span id="glicko-rd">?</span></p>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- W/L section -->
+            <h2>Record</h2>
+            <div class="container p-2">
+                <div class="row">
+                    <div class="col-6">
+                        <p><b>Games Won:</b> <span id="games-won">?</span></p>
+                        <p><b>Opponent Forfeits:</b> <span id="games-won-ff">?</span></p>
+                        <p><b>Win Percentage:</b> <span id="win-pct">?</span></p>
+                    </div>
+                    <div class="col-6">
+                        <p><b>Games Lost:</b> <span id="games-lost">?</span></p>
+                        <p><b>Games Forfeited:</b> <span id="games-lost-ff">?</span></p>
+                        <p><b>Games Tied <i>(Both FF)</i></b>: <span id="games-tied">?</span></p>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+        <script src="script.js" async defer></script>
+    </body>
+</html>

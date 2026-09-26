@@ -1,18 +1,13 @@
 function check_and_add() {
+    // make the new word, lowercasing if case sensitive isn't checked
     const new_word_container = document.getElementById("new-word");
-
     const case_sensitive = document.getElementById("case-sens-sw").checked;
-
     let new_word = new_word_container.value;
-
-
-
-
     if (!case_sensitive) {
         new_word = new_word.toLowerCase();
     }
-
     console.log(new_word);
+
 
     if (new_word == ""){
         alert("Please enter a word to check!")
@@ -22,17 +17,16 @@ function check_and_add() {
     // Source - https://stackoverflow.com/a/45121372
     // Posted by NASEEM FASAL
     // Retrieved 2026-09-25, License - CC BY-SA 3.0
-    // get algorithm choice
+    // get algorithm choice with the radio buttons
     const algo_choice = document.querySelector('input[name="algo-sw"]:checked').value;
 
     console.log(algo_choice);
 
-    // define list elements
-
+    // Run the algorithm chosen
     if (algo_choice == "1") {
-    const algo_1_list = document.getElementById("algo-1-list");
-    const palindrome = algo_1(new_word);
-    (algo_1_list.insertRow(algo_1_list.rows.length)).innerHTML = `(${new_word}: ${palindrome})`;
+        const algo_1_list = document.getElementById("algo-1-list");
+        const palindrome = algo_1(new_word);
+        (algo_1_list.insertRow(algo_1_list.rows.length)).innerHTML = `(${new_word}: ${palindrome})`;
     } else if (algo_choice == "2") {
         const algo_2_list = document.getElementById("algo-2-list");
         const palindrome = algo_2(new_word);
@@ -96,6 +90,7 @@ function algo_3(word_chk) {
     }
 }
 
+// clearing functions
 function clear_1() {
     const algo_1_list = document.getElementById("algo-1-list");
     algo_1_list.innerHTML = "";
