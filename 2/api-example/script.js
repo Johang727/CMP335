@@ -4,7 +4,7 @@ function round(x, n) {
 }
 
 async function get_information() {
-    const username = document.getElementById("username").value;
+    const username = document.getElementById("username").value.toLowerCase();
     const ranks_url = "https://tetr.io/res/league-ranks/"
 
     const user_pfp_url = "https://tetr.io/user-content/avatars/"
@@ -295,6 +295,8 @@ async function get_information() {
 
     // console.log(`Relative Days Since Last Game ${days_since_lg}`);
 
+    let effective_rd_limit;
+
     if (decaying) {
         effective_rd_limit = 100;
     } else {
@@ -311,8 +313,8 @@ async function get_information() {
         effective_rd_limit = 100+(7-days_since_lg);
     }
 
-    const days_to_decay = Math.floor(100-glicko_rd);
-    const hours_to_decay = Math.ceil((100-glicko_rd-days_to_decay) * 24);
+    const days_to_decay = Math.floor(effective_rd_limit-glicko_rd);
+    const hours_to_decay = Math.ceil((effective_rd_limit-glicko_rd-days_to_decay) * 24);
 
 
     if (glicko == -1) {
