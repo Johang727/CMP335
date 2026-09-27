@@ -30,8 +30,38 @@
             </div>
             <hr>
 
+            <h2>User Information</h2>
 
-            <!-- Current Standing -->
+            <div class="container p-2">
+                <div class="row">
+                    <div class="col-6 d-flex align-items-center gap-3">
+                        <img id="avatar-img" src="https://tetr.io/res/avatar.png" style="max-width: 20%;">
+                        
+                        <div class="container">
+                            <!-- fs = font size -->
+                            <div class="fs-4 fw-bold" id="username-display"><b>Enter Username</b></div>
+                            <div class="text-muted fs-6" id="user-id">ID</div>
+                            <div class="text-info fs-6" id="user-role">Enter User!</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <p><b>Friends: </b><span id="friends">?</span></p>
+                        <p><b>Playtime: </b><span id="hours">?</span> hours</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container p-2">
+                <h4>Badges</h4>
+                <span id="badge-showcase">
+                    <img style="max-height: 50px" src="https://tetr.io/res/avatar.png">
+
+                </span>
+            </div>
+
+            <hr>
+
+            <!-- Current Standing in Tetra League -->
             <h2>Current Standing</h2>
             <div class="container p-2">
                 <div class="row">
@@ -65,7 +95,7 @@
                     <div class="col-6">
                         <p><b>Games Lost:</b> <span id="games-lost">?</span></p>
                         <p><b>Games Forfeited:</b> <span id="games-lost-ff">?</span></p>
-                        <p><b>Games Tied <i>(Both FF)</i></b>: <span id="games-tied">?</span></p>
+                        <p><b>Games Tied <i>(Both FF / Nullified)</i></b>: <span id="games-tied">?</span></p>
                     </div>
                 </div>
             </div>

@@ -7,9 +7,139 @@ async function get_information() {
     const username = document.getElementById("username").value;
     const ranks_url = "https://tetr.io/res/league-ranks/"
 
+    const user_pfp_url = "https://tetr.io/user-content/avatars/"
+    
     /*
 
-    Current Standing Section -- STANDING
+    General User Info Section
+
+    */
+
+    const user_api_url = `https://tetrio.johang.dev/users/${username}`;
+
+    const user_response = await fetch(user_api_url);
+    const user_json = await user_response.json();
+
+    if (user_json.success == false) {
+    alert(`TETR.IO says ${user_json.error.msg}`);
+    return false;
+    }
+
+    const user_data = user_json.data;
+
+    console.log(user_data)
+
+    const display_name = user_data.username.toUpperCase();
+    const user_id = user_data._id;
+    const user_role = user_data.role;
+    const user_supporter = user_data.supporter;
+    const supporter_tier = user_data.supporter_tier;
+    const user_bad_standing = user_data.badstanding;
+
+    const friend_count = user_data.friend_count;
+    // get hours by dividing 3600
+    const playtime_hours = user_data.gametime / 3600;
+
+    const user_pfp_ctnr = document.getElementById("avatar-img");
+    user_pfp_ctnr.setAttribute("src", `${user_pfp_url}${user_id}.jpg`);
+
+    const username_ctnr = document.getElementById("username-display");
+    username_ctnr.innerText = display_name;
+
+    const user_id_ctnr = document.getElementById("user-id");
+    user_id_ctnr.innerText = user_id;
+
+    const user_role_ctnr = document.getElementById("user-role");
+
+    switch (user_role) {
+        case "user":
+            if (user_supporter) {
+                user_role_ctnr.setAttribute("class", "text-danger-emphasis fs-6");
+                user_role_ctnr.innerText = `Supporter Tier ${supporter_tier}`;
+            } else if (user_bad_standing) {
+                user_role_ctnr.setAttribute("class", "text-danger fs-6");
+                user_role_ctnr.innerText = "Bad Standing";
+            } else {
+                user_role_ctnr.setAttribute("class", "text-success fs-6");
+                user_role_ctnr.innerText = "General User";
+            }
+            break;
+        case "anon":
+            user_role_ctnr.setAttribute("class", "text-secondary fs-6");
+            user_role_ctnr.innerText = "Anonymous User"
+            break;
+        case "bot":
+            user_role_ctnr.setAttribute("class", "text-info fs-6");
+            user_role_ctnr.innerText = "Bot"
+            break;
+        case "halfmod":
+            user_role_ctnr.setAttribute("class", "text-primary fs-6");
+            user_role_ctnr.innerText = "Community Moderator"
+            break;
+        case "mod":
+            user_role_ctnr.setAttribute("class", "text-primary-emphasis fs-6");
+            user_role_ctnr.innerText = "Global Moderator"
+            break;
+        case "admin":
+            user_role_ctnr.setAttribute("class", "text-info-emphasis fs-6");
+            user_role_ctnr.innerText = "Administrator"
+            break;
+        case "sysop":
+            user_role_ctnr.setAttribute("class", "text-info-emphasis fs-6");
+            user_role_ctnr.innerText = "System Operator"
+            break;
+        case "hidden":
+            user_role_ctnr.setAttribute("class", "text-secondary fs-6");
+            user_role_ctnr.innerText = "Hidden User"
+            break;
+        case "banned":
+            user_role_ctnr.setAttribute("class", "text-danger fs-6");
+            user_role_ctnr.innerText = "Bannned"
+            break;
+        default:
+            user_role_ctnr.setAttribute("class", "text-secondary fs-6");
+            user_role_ctnr.innerText = "Account Not Found"
+            break;
+    }
+
+    const friend_ctnr = document.getElementById("friends");
+    friend_ctnr.innerText = friend_count;
+
+    const playtime_ctnr = document.getElementById("hours");
+    playtime_ctnr.innerText = Math.round(playtime_hours);
+
+    // gives a list of objects
+    const user_badges = user_data.badges;
+
+
+    console.log(user_badges);
+
+    const badge_ctnr = document.getElementById("badge-showcase");
+
+    badge_ctnr.innerHTML = "";
+
+    if (user_badges.length == 0) {
+        badge_ctnr.innerHTML = "<b>User has no badges.</b>";
+    } else {
+
+        for (const badge of user_badges) {
+            console.log(badge);
+            badge_type = badge.id;
+            let img_element = document.createElement("img")
+            img_element.src = `https://tetr.io/res/badges/${badge_type}.png`;
+            img_element.style = "max-height: 50px";
+
+            img_element.title = `${badge.label}\n${badge.desc ?? ""}`;
+
+            badge_ctnr.appendChild(img_element);
+        }
+    }
+
+    
+
+    /*
+
+    Current Standing Section 
 
     */
 
@@ -28,7 +158,7 @@ async function get_information() {
 
     const standing_summary = standing_data.data;
 
-    const rank = standing_summary.percentile_rank;
+    const rank = standing_summary.percentile_rank ?? "z";
     const rank_url = `${ranks_url}${rank}.png`
 
     const tetra_rating = standing_summary.tr;
@@ -36,7 +166,6 @@ async function get_information() {
 
     if (tetra_rating == -1) {
         alert("Player has not played Tetra League!");
-        return false;
     }
 
 
@@ -94,7 +223,6 @@ async function get_information() {
 
     if (!record_data.success) {
         alert(`TETR.IO says ${record_data.error.msg}`)
-        return false;
     }
 
     //console.log(data);
@@ -187,8 +315,10 @@ async function get_information() {
     const hours_to_decay = Math.ceil((100-glicko_rd-days_to_decay) * 24);
 
 
-
-    if (glicko_rd >= 100) {
+    if (glicko == -1) {
+        rating_expiration_ctnr.setAttribute("class", "text-secondary fs-6");
+        rating_expiration_ctnr.innerText = "Never Rated";
+    } else if (glicko_rd >= 100) {
 
         rating_expiration_ctnr.setAttribute("class", "text-danger fs-6");
         rating_expiration_ctnr.innerText = "Rating Expired";
