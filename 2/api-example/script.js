@@ -40,73 +40,76 @@ async function get_information() {
     // get hours by dividing 3600
     const playtime_hours = user_data.gametime / 3600;
 
-    const user_pfp_ctnr = document.getElementById("avatar-img");
-    user_pfp_ctnr.setAttribute("src", `${user_pfp_url}${user_id}.jpg`);
+    const user_pfp_cntr = document.getElementById("avatar-img");
 
-    const username_ctnr = document.getElementById("username-display");
-    username_ctnr.innerText = display_name;
 
-    const user_id_ctnr = document.getElementById("user-id");
-    user_id_ctnr.innerText = user_id;
+    user_pfp_cntr.setAttribute("srcset", `${user_pfp_url}${user_id}.jpg` ?? "https://tetr.io/res/avatar.png");
 
-    const user_role_ctnr = document.getElementById("user-role");
+
+    const username_cntr = document.getElementById("username-display");
+    username_cntr.innerText = display_name;
+
+    const user_id_cntr = document.getElementById("user-id");
+    user_id_cntr.innerText = user_id;
+
+    const user_role_cntr = document.getElementById("user-role");
 
     switch (user_role) {
         case "user":
             if (user_bad_standing) {
-                user_role_ctnr.setAttribute("class", "text-danger fs-6");
-                user_role_ctnr.innerText = "Bad Standing";
+                user_role_cntr.setAttribute("class", "text-danger fs-6");
+                user_role_cntr.innerText = "Bad Standing";
             } else if (user_supporter) {
-                user_role_ctnr.setAttribute("class", "text-danger-emphasis fs-6");
-                user_role_ctnr.innerText = `Supporter Tier ${supporter_tier}`;
+                user_role_cntr.setAttribute("class", "text-danger-emphasis fs-6");
+                user_role_cntr.innerText = `Supporter Tier ${supporter_tier}`;
             } else {
-                user_role_ctnr.setAttribute("class", "text-success fs-6");
-                user_role_ctnr.innerText = "General User";
+                user_role_cntr.setAttribute("class", "text-success fs-6");
+                user_role_cntr.innerText = "General User";
             }
             break;
         case "anon":
-            user_role_ctnr.setAttribute("class", "text-secondary fs-6");
-            user_role_ctnr.innerText = "Anonymous User"
+            user_role_cntr.setAttribute("class", "text-secondary fs-6");
+            user_role_cntr.innerText = "Anonymous User"
             break;
         case "bot":
-            user_role_ctnr.setAttribute("class", "text-info fs-6");
-            user_role_ctnr.innerText = "Bot"
+            user_role_cntr.setAttribute("class", "text-info fs-6");
+            user_role_cntr.innerText = "Bot"
             break;
         case "halfmod":
-            user_role_ctnr.setAttribute("class", "text-primary fs-6");
-            user_role_ctnr.innerText = "Community Moderator"
+            user_role_cntr.setAttribute("class", "text-primary fs-6");
+            user_role_cntr.innerText = "Community Moderator"
             break;
         case "mod":
-            user_role_ctnr.setAttribute("class", "text-primary-emphasis fs-6");
-            user_role_ctnr.innerText = "Global Moderator"
+            user_role_cntr.setAttribute("class", "text-primary-emphasis fs-6");
+            user_role_cntr.innerText = "Global Moderator"
             break;
         case "admin":
-            user_role_ctnr.setAttribute("class", "text-info-emphasis fs-6");
-            user_role_ctnr.innerText = "Administrator"
+            user_role_cntr.setAttribute("class", "text-info-emphasis fs-6");
+            user_role_cntr.innerText = "Administrator"
             break;
         case "sysop":
-            user_role_ctnr.setAttribute("class", "text-info-emphasis fs-6");
-            user_role_ctnr.innerText = "System Operator"
+            user_role_cntr.setAttribute("class", "text-info-emphasis fs-6");
+            user_role_cntr.innerText = "System Operator"
             break;
         case "hidden":
-            user_role_ctnr.setAttribute("class", "text-secondary fs-6");
-            user_role_ctnr.innerText = "Hidden User"
+            user_role_cntr.setAttribute("class", "text-secondary fs-6");
+            user_role_cntr.innerText = "Hidden User"
             break;
         case "banned":
-            user_role_ctnr.setAttribute("class", "text-danger fs-6");
-            user_role_ctnr.innerText = "Bannned"
+            user_role_cntr.setAttribute("class", "text-danger fs-6");
+            user_role_cntr.innerText = "Bannned"
             break;
         default:
-            user_role_ctnr.setAttribute("class", "text-secondary fs-6");
-            user_role_ctnr.innerText = "Account Not Found"
+            user_role_cntr.setAttribute("class", "text-secondary fs-6");
+            user_role_cntr.innerText = "Account Not Found"
             break;
     }
 
-    const friend_ctnr = document.getElementById("friends");
-    friend_ctnr.innerText = friend_count;
+    const friend_cntr = document.getElementById("friends");
+    friend_cntr.innerText = friend_count;
 
-    const playtime_ctnr = document.getElementById("hours");
-    playtime_ctnr.innerText = Math.round(playtime_hours);
+    const playtime_cntr = document.getElementById("hours");
+    playtime_cntr.innerText = Math.round(playtime_hours);
 
     // gives a list of objects
     const user_badges = user_data.badges;
@@ -114,12 +117,12 @@ async function get_information() {
 
     console.log(user_badges);
 
-    const badge_ctnr = document.getElementById("badge-showcase");
+    const badge_cntr = document.getElementById("badge-showcase");
 
-    badge_ctnr.innerHTML = "";
+    badge_cntr.innerHTML = "";
 
     if (user_badges.length == 0) {
-        badge_ctnr.innerHTML = "<b>User has no badges.</b>";
+        badge_cntr.innerHTML = "<b>User has no badges.</b>";
     } else {
 
         for (const badge of user_badges) {
@@ -133,7 +136,7 @@ async function get_information() {
 
             img_element.alt = badge.label;
 
-            badge_ctnr.appendChild(img_element);
+            badge_cntr.appendChild(img_element);
         }
     }
 
@@ -182,30 +185,30 @@ async function get_information() {
     const rank_img = document.getElementById("tetra-rank-img");
     rank_img.setAttribute("src", rank_url);
 
-    const tetra_rating_ctnr = document.getElementById("tetra-rating");
-    tetra_rating_ctnr.innerText = `${round(tetra_rating, 5)} SR`;
+    const tetra_rating_cntr = document.getElementById("tetra-rating");
+    tetra_rating_cntr.innerText = `${round(tetra_rating, 5)} SR`;
 
-    const tetra_placement_ctnr = document.getElementById("tetra-placement");
+    const tetra_placement_cntr = document.getElementById("tetra-placement");
 
     if (tetra_placement != "-1") { 
-        tetra_placement_ctnr.innerText = `#${tetra_placement}`;
+        tetra_placement_cntr.innerText = `#${tetra_placement}`;
     } else {
-        tetra_placement_ctnr.innerText = `Not Placed`; // Can either mean unranked or rank expired
+        tetra_placement_cntr.innerText = `Not Placed`; // Can either mean unranked or rank expired
     }
 
-    rating_expiration_ctnr = document.getElementById("rating-expiration");
+    rating_expiration_cntr = document.getElementById("rating-expiration");
 
     // determining the # of days requires information from the next section.
 
-    const percentile_ctnr = document.getElementById("percentile");
+    const percentile_cntr = document.getElementById("percentile");
 
-    percentile_ctnr.innerText = `${round(percentile*100, 4)}%`
+    percentile_cntr.innerText = `${round(percentile*100, 4)}%`
 
-    const glicko_ctnr = document.getElementById("glicko");
-    glicko_ctnr.innerText = `${round(glicko, 5)}`
+    const glicko_cntr = document.getElementById("glicko");
+    glicko_cntr.innerText = `${round(glicko, 5)}`
 
-    const glicko_rd_ctnr = document.getElementById("glicko-rd");
-    glicko_rd_ctnr.innerText = `${round(glicko_rd, 3)}`
+    const glicko_rd_cntr = document.getElementById("glicko-rd");
+    glicko_rd_cntr.innerText = `${round(glicko_rd, 3)}`
 
     /* 
 
@@ -225,7 +228,11 @@ async function get_information() {
 
     if (!record_data.success) {
         alert(`TETR.IO says ${record_data.error.msg}`)
+        return false;
     }
+    
+    const record_spinner = document.getElementById("record-spinner");
+    record_spinner.removeAttribute("hidden"); 
 
     //console.log(data);
     /* An array of match objects
@@ -271,22 +278,25 @@ async function get_information() {
 
     const win_rate = round(((wins+opp_ff) / (wins+opp_ff+loss+self_ff+ties)) * 100, 4); // get a win_rate percentage
 
-    const won_ctnr = document.getElementById("games-won");
-    const o_ff_ctnr = document.getElementById("games-won-ff");
+    const won_cntr = document.getElementById("games-won");
+    const o_ff_cntr = document.getElementById("games-won-ff");
 
-    const lost_ctnr = document.getElementById("games-lost");
-    const ff_ctnr = document.getElementById("games-lost-ff");
-    const ties_ctnr = document.getElementById("games-tied");
+    const lost_cntr = document.getElementById("games-lost");
+    const ff_cntr = document.getElementById("games-lost-ff");
+    const ties_cntr = document.getElementById("games-tied");
 
-    const win_pct_ctnr = document.getElementById("win-pct");
+    const win_pct_cntr = document.getElementById("win-pct");
 
-    won_ctnr.innerText = wins;
-    o_ff_ctnr.innerText = opp_ff;
-    win_pct_ctnr.innerText = `${win_rate}%`;
+    won_cntr.innerText = wins;
+    o_ff_cntr.innerText = opp_ff;
+    win_pct_cntr.innerText = `${win_rate}%`;
 
-    lost_ctnr.innerText = loss;
-    ff_ctnr.innerText = self_ff;
-    ties_ctnr.innerText = ties;
+    lost_cntr.innerText = loss;
+    ff_cntr.innerText = self_ff;
+    ties_cntr.innerText = ties;
+
+    record_spinner.setAttribute("hidden", ""); 
+
 
     // Make the expiry section
 
@@ -320,20 +330,20 @@ async function get_information() {
 
 
     if (glicko == -1) {
-        rating_expiration_ctnr.setAttribute("class", "text-secondary fs-6");
-        rating_expiration_ctnr.innerText = "Never Rated";
+        rating_expiration_cntr.setAttribute("class", "text-secondary fs-6");
+        rating_expiration_cntr.innerText = "Never Rated";
     } else if (glicko_rd >= 100) {
 
-        rating_expiration_ctnr.setAttribute("class", "text-danger fs-6");
-        rating_expiration_ctnr.innerText = "Rating Expired";
+        rating_expiration_cntr.setAttribute("class", "text-danger fs-6");
+        rating_expiration_cntr.innerText = "Rating Expired";
 
     } else {
         if (!decaying) {
-            rating_expiration_ctnr.setAttribute("class", "text-success fs-6");
-            rating_expiration_ctnr.innerText = `Rating Expires in ${days_to_decay} Days & ${hours_to_decay} Hours`
+            rating_expiration_cntr.setAttribute("class", "text-success fs-6");
+            rating_expiration_cntr.innerText = `Rating Expires in ${days_to_decay} Days & ${hours_to_decay} Hours`
         } else {
-            rating_expiration_ctnr.setAttribute("class", "text-warning-emphasis fs-6");
-            rating_expiration_ctnr.innerText = `Rating Expires in ${days_to_decay} Days & ${hours_to_decay} Hours`
+            rating_expiration_cntr.setAttribute("class", "text-warning-emphasis fs-6");
+            rating_expiration_cntr.innerText = `Rating Expires in ${days_to_decay} Days & ${hours_to_decay} Hours`
         }
 
 
