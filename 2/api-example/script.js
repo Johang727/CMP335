@@ -53,12 +53,12 @@ async function get_information() {
 
     switch (user_role) {
         case "user":
-            if (user_supporter) {
-                user_role_ctnr.setAttribute("class", "text-danger-emphasis fs-6");
-                user_role_ctnr.innerText = `Supporter Tier ${supporter_tier}`;
-            } else if (user_bad_standing) {
+            if (user_bad_standing) {
                 user_role_ctnr.setAttribute("class", "text-danger fs-6");
                 user_role_ctnr.innerText = "Bad Standing";
+            } else if (user_supporter) {
+                user_role_ctnr.setAttribute("class", "text-danger-emphasis fs-6");
+                user_role_ctnr.innerText = `Supporter Tier ${supporter_tier}`;
             } else {
                 user_role_ctnr.setAttribute("class", "text-success fs-6");
                 user_role_ctnr.innerText = "General User";
@@ -130,6 +130,8 @@ async function get_information() {
             img_element.style = "max-height: 50px";
 
             img_element.title = `${badge.label}\n${badge.desc ?? ""}`;
+
+            img_element.alt = badge.label;
 
             badge_ctnr.appendChild(img_element);
         }
