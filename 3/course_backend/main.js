@@ -1,83 +1,100 @@
 #!/usr/bin/node
-/* First Video
-function say_hello(name) {
-    console.log(`Hello ${name}`);
-}
 
-//const logger = require("./logger");
+const express = require("express");
+const Joi = require("joi");
 
-//say_hello("Johang");
-//console.log(window);
-//var message;
-//console.log(global.message);
-//console.log(module);
-//console.log(logger);
-//logger.log("message");
+const app = express();
 
-//const path = require("path");
+app.use(express.json());
 
-//const path_obj = path.parse(__filename);
+function validate_course(course) {
+    const schema = Joi.object({
+        name: Joi.string().min(3).required()
+    });
+    const result = schema.validate(course, { abortEarly: false });
+    return result;
+};
 
-//console.log(path_obj);
 
-//const os = require("os");
 
-//const total_mem = os.totalmem();
-//const free_mem = os.freemem();
 
-//console.log(`Total Memory: ${total_mem}`);
-//console.log(`Free Memory: ${free_mem}`);
+const courses = [
+    {id: 1, name: "Course 1"},
+    {id: 2, name: "Course 2"},
+    {id: 2, name: "Course 3"}
+];
 
-//const fs = require("fs");
-
-//const files = fs.readdirSync("./");
-
-//console.log(files)
-/*
-fs.readdir("notadirectory", function(err, files){
-    if (err) console.log("Error", err);
-    else console.log("Result", files);
+app.get("/", (req, res) => {
+    res.send("Hello World");
 });
 
-//const EventEmitter = require("events");
-//const { emitWarning } = require("process");
-
-
-
-
-//emitter.emit("message_logged", {id: 1, url: "tetr.io"});
-
-
-//const Logger = require("./logger");
-
-//const logger = new Logger();
-
-/*
-logger.on("message_logged", (args) => {
-    console.log("Listener Called!!!", args)
-});
-logger.log("message")
-
-/*
-const http = require("http");
-
-const server = http.createServer((req, res) =>
-{
-    if (req.url === "/") {
-        res.write("Hewo");
-        res.end();
-    }
-
-    if (req.url === "/api/courses") {
-        res.write(JSON.stringify([1, 2, 3]));
-        res.end();
-    }
+app.get("/api/courses", (req, res) => {
+    res.send(courses);
 });
 
+app.get("/api/courses/:id", (req, res) => {
+    // check if exists
+    const course = courses.find(c => c.id === parseInt(req.params.id));
+    if (!course) {
+        res.status(404).send("The course with the given ID was not found.");
+        return;
+    };
 
+    res.send(course);
+});
 
-server.listen(3000);
+app.post("/api/courses", (req, res) => {
+    // check if exists
+    const {error} = validate_course(req.body);
 
-console.log("Listening on port 3000...");
-*/
+    if (error) {
+        res.status(400).send(error.details[0].message);
+        return;
+    };
 
+    const course = {
+        id: courses.length + 1, 
+        name: req.body.name
+    };
+
+    courses.push(course);
+    res.send(course);
+});
+
+app.put("/api/courses/:id", (req, res) => {
+    // check if exists
+    const course = courses.find(c => c.id === parseInt(req.params.id));
+    if (!course) {
+        res.status(404).send("The course with the given ID was not found.");
+        return;
+    };
+
+    const {error} = validate_course(req.body);
+
+    if (error) {
+        res.status(400).send(error.details[0].message);
+        return;
+    };
+
+    course.name = req.body.name;
+    res.send(course);
+
+});
+
+app.delete("/api/courses/:id", (req, res) => {
+    // check if exists
+    const course = courses.find(c => c.id === parseInt(req.params.id));
+
+    if (!course) {
+        res.status(404).send("The course with the given ID was not found.");
+        return;
+    };
+
+    const idx = courses.indexOf(course);
+    courses.splice(idx, 1);
+
+    res.send(course);
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Listening on port ${port}....`));
