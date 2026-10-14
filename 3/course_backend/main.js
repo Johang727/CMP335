@@ -7,93 +7,113 @@ const app = express();
 
 app.use(express.json());
 
-function validate_course(course) {
+function validate_distro(distro) {
     const schema = Joi.object({
-        name: Joi.string().min(3).required()
+        name: Joi.string().required(),
+        desc: Joi.string().min(5).required(),
+        url: Joi.string.required()
     });
-    const result = schema.validate(course, { abortEarly: false });
+    const result = schema.validate(distro, { abortEarly: false });
     return result;
 };
 
-
-
-
-const courses = [
-    {id: 1, name: "Course 1"},
-    {id: 2, name: "Course 2"},
-    {id: 2, name: "Course 3"}
+const distros = [
+    {
+        id: 1, 
+        name: "Suicide Linux",
+        desc: "If a command does not exist, interpret as \"sudo rm -rf / --no-preserve-root\". Based on Debian.",
+        url: "https://qntm.org/suicide"
+    },
+    {
+        id: 2, 
+        name: "AmogOS",
+        desc: "A very serious OS based on Among Us. Based on RPi OS & Debian.",
+        url: "https://github.com/Amog-OS/AmogOS"
+    },
+    {
+        id: 3, 
+        name: "Hannah Montana Linux Modern",
+        desc: "A modern remaster of the original Hannah Montana Linux based on Debian.",
+        url: "https://gitlab.com/DecaCagle/hannahmontanalinux26"
+    },
+    {
+        id: 4, 
+        name: "Rebecca Black OS",
+        desc: "An OS based on Debian and one of the earliest distros to use Wayland.",
+        url: "https://distrowatch.com/table.php?distribution=rebeccablackos"
+    },
 ];
 
 app.get("/", (req, res) => {
-    res.send("Hello World");
+    res.status(300).redirect("/api/distros");
 });
 
-app.get("/api/courses", (req, res) => {
-    res.send(courses);
+app.get("/api/distros", (req, res) => {
+    res.send(distros);
 });
 
-app.get("/api/courses/:id", (req, res) => {
+app.get("/api/distros/:id", (req, res) => {
     // check if exists
-    const course = courses.find(c => c.id === parseInt(req.params.id));
-    if (!course) {
-        res.status(404).send("The course with the given ID was not found.");
+    const distro = distros.find(c => c.id === parseInt(req.params.id));
+    if (!distro) {
+        res.status(404).send("The distro with the given ID was not found.");
         return;
     };
 
-    res.send(course);
+    res.send(distro);
 });
 
-app.post("/api/courses", (req, res) => {
+app.post("/api/distros", (req, res) => {
     // check if exists
-    const {error} = validate_course(req.body);
+    const {error} = validate_distro(req.body);
 
     if (error) {
         res.status(400).send(error.details[0].message);
         return;
     };
 
-    const course = {
-        id: courses.length + 1, 
+    const distro = {
+        id: distros.length + 1, 
         name: req.body.name
     };
 
-    courses.push(course);
-    res.send(course);
+    distros.push(distro);
+    res.send(distro);
 });
 
-app.put("/api/courses/:id", (req, res) => {
+app.put("/api/distros/:id", (req, res) => {
     // check if exists
-    const course = courses.find(c => c.id === parseInt(req.params.id));
-    if (!course) {
-        res.status(404).send("The course with the given ID was not found.");
+    const distro = distros.find(c => c.id === parseInt(req.params.id));
+    if (!distro) {
+        res.status(404).send("The distro with the given ID was not found.");
         return;
     };
 
-    const {error} = validate_course(req.body);
+    const {error} = validate_distro(req.body);
 
     if (error) {
         res.status(400).send(error.details[0].message);
         return;
     };
 
-    course.name = req.body.name;
-    res.send(course);
+    distro.name = req.body.name;
+    res.send(distro);
 
 });
 
-app.delete("/api/courses/:id", (req, res) => {
+app.delete("/api/distros/:id", (req, res) => {
     // check if exists
-    const course = courses.find(c => c.id === parseInt(req.params.id));
+    const distro = distros.find(c => c.id === parseInt(req.params.id));
 
-    if (!course) {
-        res.status(404).send("The course with the given ID was not found.");
+    if (!distro) {
+        res.status(404).send("The distro with the given ID was not found.");
         return;
     };
 
-    const idx = courses.indexOf(course);
-    courses.splice(idx, 1);
+    const idx = distros.indexOf(distro);
+    distros.splice(idx, 1);
 
-    res.send(course);
+    res.send(distro);
 });
 
 const port = process.env.PORT || 3000;
