@@ -11,7 +11,7 @@ function validate_distro(distro) {
     const schema = Joi.object({
         name: Joi.string().required(),
         desc: Joi.string().min(5).required(),
-        url: Joi.string.required()
+        url: Joi.string().required()
     });
     const result = schema.validate(distro, { abortEarly: false });
     return result;
@@ -74,7 +74,9 @@ app.post("/api/distros", (req, res) => {
 
     const distro = {
         id: distros.length + 1, 
-        name: req.body.name
+        name: req.body.name,
+        desc: req.body.desc,
+        url: req.body.url
     };
 
     distros.push(distro);
@@ -97,6 +99,8 @@ app.put("/api/distros/:id", (req, res) => {
     };
 
     distro.name = req.body.name;
+    distro.desc = req.body.desc;
+    distro.url = req.body.url;
     res.send(distro);
 
 });
