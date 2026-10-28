@@ -1,0 +1,45 @@
+Relational DBMS
+ - Like a table
+ - SQL
+ - Several entries have X
+ - Normalization
+   - 
+ - Entity
+   - A student
+   - Entity Relationship
+
+Major table: Major ID & Major Name
+
+ID | Major
+1 | Computing
+2 | Data Analytics
+
+Minor Table:
+
+ID | Minor
+1 | Computing
+2 | Sociology
+
+Student table:
+
+Student ID | Last Name | First Name | Major ID | Minor ID 
+00001 | Engebretson | Alec | 1 | 2
+
+ID: Primary Key - Identifies One
+Last Name: Secondary Key - Identifies Many 
+
+Multiple Majors: Add another table
+
+Student Major Table
+Own ID | Student ID | Major ID
+1 | 1 | 1
+2 | 1 | 2
+
+
+Remove Major from Student Table
+
+[1, 2, 3, 4, 5, ,5 ]
+
+
+
+
