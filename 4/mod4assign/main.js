@@ -12,16 +12,14 @@ let con = mysql.createConnection({
   password: "cmp",
 });
 
-await con.connect(function(err) {
+con.connect(function(err) {
   if (err) throw err;
-  con.query("CREATE DATABASE customer_relations IF NOT EXISTS", function (err, result) {
+  con.query("CREATE DATABASE IF NOT EXISTS customer_relations", function (err, result) {
     if (err) throw err;
-    console.log("Database created!");
   });
-  con.close();
 });
 
-let con = mysql.createConnection({
+con = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "cmp",
@@ -29,13 +27,12 @@ let con = mysql.createConnection({
 });
 
 
-await con.connect(function(err) {
+con.connect(function(err) {
   if (err) throw err;
   console.log("Connected!");
-  let sql = "CREATE TABLE customers (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), address VARCHAR(255)) IF NOT EXISTS";
+  let sql = "CREATE TABLE IF NOT EXISTS customers (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), address VARCHAR(255), priority INT)";
   con.query(sql, function (err, result) {
     if (err) throw err;
-    console.log("Table created");
   });
 });
 
@@ -46,7 +43,8 @@ app.use(cors());
 function validate_customer(customer) {
   const schema = Joi.object({
     name: Joi.string().required(),
-    address: Joi.string().required()
+    address: Joi.string().required(),
+    priority: Joi.number().required()
   });
   const result = schema.validate(customer, { abortEarly: false });
   return result;
@@ -58,28 +56,25 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/customers", (req, res) => {
-  await con.connect(function(err) {
+  con.connect(function(err) {
     if (err) throw err;
     con.query("SELECT * FROM customers", function (err, result, fields) {
       if (err) throw err;
       res.send(result);
     });
-    con.close();
   });
 });
 
 app.get("/api/customers/:id", (req, res) => {
   // check if exists
-  await con.connect(function(err) {
+  con.connect(function(err) {
     if (err) throw err;
     const id = req.params.id;
     const sql = "SELECT * FROM customers WHERE id = ?"
     con.query(sql, [id], function (err, result, fields) {
       if (err) res.status(404).send("The customer with the given ID was not found.");
-    return;
       res.send(result);
     });
-    con.close();
   });
 });
 
@@ -94,17 +89,16 @@ app.post("/api/customers", (req, res) => {
 
   const name = req.body.name;
   const address = req.body.address;
+  const priority = req.body.priority;
 
 
-  await con.connect(function(err) {
+  con.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
-    let sql = `INSERT INTO customers (name, address) VALUES ('${name}', '${address}')`;
-    con.query(sql, function (err, result) {
+    con.query("INSERT INTO customers (name, address, priority) VALUES (?, ?, ?)", [name, address, priority], function (err, result) {
       if (err) throw err;
-      res.send("1 record inserted");
+      res.send(`Customer ID: ${result.insertId}`)
     });
-    con.close();
   });
 
 
