@@ -93,7 +93,6 @@ app.post("/api/students", (req, res) => {
     res.status(400).send(error.details[0].message);
     return;
   }
-
   const lastname = req.body.lastname;
   const firstname = req.body.firstname;
   const emailaddr = req.body.emailaddr;
@@ -104,7 +103,7 @@ app.post("/api/students", (req, res) => {
     console.log("Connected!");
     con.query("INSERT INTO students (lastname, firstname, emailaddr) VALUES (?, ?, ?)", [lastname, firstname, emailaddr], function (err, result) {
       if (err) throw err;
-      res.send(`student ID: ${result.insertId}`)
+      res.send(`Student ID: ${result.insertId}`)
     });
   });
 
@@ -114,12 +113,49 @@ app.post("/api/students", (req, res) => {
 
 /* TODO: Update a student's entry with an :id */
 app.put("/api/students/:id", (req, res) => {
-  res.status(500).send("Not yet implemented.");
+
+  const { error } = validate_student(req.body);
+
+  if (error) {
+    res.status(400).send(error.details[0].message);
+    return;
+  }
+
+  const id = req.params.id;
+
+  const lastname = req.body.lastname;
+  const firstname = req.body.firstname;
+  const emailaddr = req.body.emailaddr;
+
+  con.connect(function(err) {
+    if (err) throw err;
+    con.query("UPDATE students SET lastname = ?, firstname = ?, emailaddr = ? WHERE id = ?", [lastname, firstname, emailaddr, id], function (err, result) {
+      if (err) throw err;
+        if (result.affectedRows != 0){
+          res.send(`Student ${id} updated.`)
+        } else {
+          res.send(`Student with ID ${id} does not exist.`)
+        }
+    });
+  });
 });
 
 /* TODO: Delete a student's entry with an :id */
 app.delete("/api/students/:id", (req, res) => {
-  res.status(500).send("Not yet implemented.");
+
+  const id = req.params.id;
+
+  con.connect(function(err) {
+    if (err) throw err;
+    con.query("DELETE FROM students WHERE id = ?", [id], function (err, result) {
+      if (err) throw err;
+      if (result.affectedRows != 0){
+        res.send(`Student ${id} removed.`)
+      } else {
+        res.send(`Student with ID ${id} does not exist.`)
+      }
+    });
+  });
 });
 
 
