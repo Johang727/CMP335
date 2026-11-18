@@ -76,7 +76,10 @@ app.get("/api/students/:id", (req, res) => {
     const sql = "SELECT * FROM students WHERE id = ?"
     con.query(sql, [id], function (err, result, fields) {
       if (err) res.status(404).send("The student with the given ID was not found.");
-      res.send(result);
+
+      if (JSON.stringify(result) == "[]") {
+        res.status(404).send("The student with the given ID was not found.")
+      } else {res.send(result);}
     });
   });
 });
