@@ -103,7 +103,7 @@ app.post("/api/students", (req, res) => {
     console.log("Connected!");
     con.query("INSERT INTO students (lastname, firstname, emailaddr) VALUES (?, ?, ?)", [lastname, firstname, emailaddr], function (err, result) {
       if (err) throw err;
-      res.send(`Student ID: ${result.insertId}`)
+      res.send(`${result.insertId}`);
     });
   });
 
@@ -132,7 +132,7 @@ app.put("/api/students/:id", (req, res) => {
     con.query("UPDATE students SET lastname = ?, firstname = ?, emailaddr = ? WHERE id = ?", [lastname, firstname, emailaddr, id], function (err, result) {
       if (err) throw err;
         if (result.affectedRows != 0){
-          res.send(`Student ${id} updated.`)
+          res.send(`${id}`)
         } else {
           res.send(`Student with ID ${id} does not exist.`)
         }

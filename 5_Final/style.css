@@ -1,0 +1,54 @@
+hr {
+    margin: 1.5%;
+}
+
+body {
+    font-family: monospace;
+    background-color: rgb(255, 235, 223);
+    margin: 30px;
+    font-size: large;
+}
+
+button {
+    border-radius: 5px;
+    background: rgb(119, 205, 138);
+    color:rgb(0, 0, 0);
+}
+
+button.edit {
+    border-radius: 5px;
+    background: rgb(252, 239, 100);
+    color:rgb(0, 0, 0);
+}
+
+button.delete {
+    border-radius: 5px;
+    background: rgb(255, 143, 143);
+    color:rgb(0, 0, 0);
+}
+
+input, textarea {
+    width: 100%;
+}
+
+input[type="text"],
+select,
+textarea {
+    border-radius: 5px;
+}
+
+.pfp_img {
+    border-radius: 5px;
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
