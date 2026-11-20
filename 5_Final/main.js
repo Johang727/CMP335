@@ -25,7 +25,17 @@ con.connect(function(err) {
   con.query("USE college_reg"), function (err) { if (err) throw err;};
 });
 
+/* Tables 
 
+Student Table Format:
+ID (auto) | Last Name | First Name | Email Address
+Faculty Table Format:
+ID (auto) | Last Name | First Name | Email Address
+
+*/
+
+
+// Student Table
 con.connect(function(err) {
   if (err) throw err;
 
@@ -34,6 +44,17 @@ con.connect(function(err) {
     if (err) throw err;
   });
 });
+
+// Faculty Table
+con.connect(function(err) {
+  if (err) throw err;
+
+  const sql = "CREATE TABLE IF NOT EXISTS faculty (id INT AUTO_INCREMENT PRIMARY KEY, lastname VARCHAR(255), firstname VARCHAR(255), emailaddr VARCHAR(255))";
+  con.query(sql, function (err, result) {
+    if (err) throw err;
+  });
+});
+
 
 /* APPLICATION FUNCTIONS */
 /* --------------------- */
