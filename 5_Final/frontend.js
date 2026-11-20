@@ -1,513 +1,149 @@
-const server_url = "http://127.0.0.1:3002"; // 3000 is used by VSC live server;
-
-/* Called on page load and modified on updates */
-async function prep_table() {
-  const students_list = document.getElementById("students-list");
-
-  // show the spinner again & empty out the previous table
-  students_list.innerHTML = `<div class="spinner-border" role="status" id="students-spinner">`;
-
-  // table creation
-  const new_table = document.createElement("table");
-  const header_row = document.createElement("tr");
-
-  // make the header row
-  const student_attrs = ["#", "Last Name", "First Name", "Email Address", "Options"];
-
-  for (const attr of student_attrs) {
-    const new_cell = document.createElement("th");
-    // create text node handles sanitation
-    new_cell.appendChild(document.createTextNode(attr));
-    header_row.appendChild(new_cell);
-  }
-
-  new_table.appendChild(header_row); // add header row
-
-  /* For POST Operation */
-  const add_row = document.createElement("tr");
-  const id_cell = document.createElement("td");
-  id_cell.appendChild(document.createTextNode("N"));
-  add_row.appendChild(id_cell);
-
-  // create lastname field
-  let new_cell = document.createElement("td");
-
-  let new_input = document.createElement("input");
-  new_input.id = `lastname_new`;
-
-  new_cell.appendChild(new_input);
-  add_row.appendChild(new_cell);
-
-  // create firstname field
-  new_cell = document.createElement("td");
-
-  new_input = document.createElement("input");
-  new_input.id = `firstname_new`;
-
-  new_cell.appendChild(new_input);
-  add_row.appendChild(new_cell);
-
-  // create url field
-  new_cell = document.createElement("td");
-
-  new_input = document.createElement("input");
-  new_input.id = `emailaddr_new`;
-
-  new_cell.appendChild(new_input);
-  add_row.appendChild(new_cell);
-
-
-  // submit button
-  const submit_cell = document.createElement("td");
-
-  const submit_button = document.createElement("button");
-  submit_button.setAttribute("onclick", "submit_new()");
-  submit_button.appendChild(document.createTextNode("Append"));
-  submit_cell.appendChild(submit_button);
-
-  add_row.appendChild(submit_cell);
-
-  new_table.appendChild(add_row);
-
-  // replace the HTML with the new formed table
-  students_list.replaceChildren(new_table);
-} // prep_table()
-
-/* only called when button pressed */
-async function get_students() {
-  // get the div where the students will be shown
-  const students_list = document.getElementById("students-list");
-
-  // show the spinner again & empty out the previous table
-  students_list.innerHTML = `<div class="spinner-border" role="status" id="students-spinner">`;
-
-  // table creation
-  const new_table = document.createElement("table");
-  const header_row = document.createElement("tr");
-
-  // make the header row
-  const student_attrs = ["#", "Last Name", "First Name", "Email Address", "Options"];
-  for (const attr of student_attrs) {
-    const new_cell = document.createElement("th");
-    // create text node handles sanitation
-    new_cell.appendChild(document.createTextNode(attr));
-    header_row.appendChild(new_cell);
-  }
-  new_table.appendChild(header_row); // add header row
-
-
-  // get our students from the backend
-  const response = await fetch(`${server_url}/api/students`);
-  const students = await response.json();
-
-  if (response.status != 200) { // if its returning a non 200 code, it's likely not running.
-    alert("Backend returned non-200 code. Is it running?");
-    return false;
-  }
-
-  // cycle through each student, creating a row per student
-  for (const student of students) {
-    const new_row = document.createElement("tr");
-
-    //console.log(student);
-
-    // I couldn't get a for loop to work, so I went with this weird function found below
-    // https://www.geeksforgeeks.org/javascript/how-to-iterate-json-object-in-javascript/
-    Object.keys(student).forEach((key) => {
-      // create a new cell per key
-      const new_cell = document.createElement("td");
-      new_cell.id = `${key}_${student["id"]}`; // will use this later for the edit button
-      if (key == "emailaddr") {
-        // handle the email and make it clickable
-        const link_element = document.createElement("a");
-        link_element.href = `mailto:${student[key]}`;
-        link_element.appendChild(document.createTextNode(student[key]));
-        new_cell.appendChild(link_element);
-      } else { // general case
-        //console.log(`${key}: ${student[key]}`);
-        new_cell.appendChild(document.createTextNode(student[key]));
-      }
-      new_row.appendChild(new_cell);
-    });
-
-    // append the options section cell at the end for CRUD operations
-    const new_cell = document.createElement("td");
-
-    // edit/PUT button
-    const edit_button = document.createElement("button");
-    edit_button.setAttribute("onclick", "student_edit(this)"); // set attribute is more consistent for non common items
-    edit_button.setAttribute("class", "edit"); // though ".class" didn't work for this and every element has class, so I'm not sure.
-    edit_button.appendChild(document.createTextNode("Edit"));
-    new_cell.appendChild(edit_button);
-    // DELETE button
-    const delete_button = document.createElement("button");
-    delete_button.setAttribute("onclick", "student_delete(this)"); // set attribute is more consistent for non common items
-    delete_button.setAttribute("class", "delete"); // though ".class" didn't work for this and every element has class, so I'm not sure.
-    delete_button.appendChild(document.createTextNode("Delete"));
-    new_cell.appendChild(delete_button);
-
-    // add the new cell to the row
-    new_row.appendChild(new_cell);
-    // add the new row, saving its corresponding ID
-    new_row.id = student["id"];
-    new_table.appendChild(new_row);
-  }
-
-  /* For POST Operation */
-  const add_row = document.createElement("tr");
-  const id_cell = document.createElement("td");
-  id_cell.appendChild(document.createTextNode("N"));
-  add_row.appendChild(id_cell);
-
-  // create lastname field
-  let new_cell = document.createElement("td");
-
-  let new_input = document.createElement("input");
-  new_input.id = `lastname_new`;
-
-  new_cell.appendChild(new_input);
-  add_row.appendChild(new_cell);
-
-  // create firstname field
-  new_cell = document.createElement("td");
-
-  new_input = document.createElement("input");
-  new_input.id = `firstname_new`;
-
-  new_cell.appendChild(new_input);
-  add_row.appendChild(new_cell);
-
-  // create url field
-  new_cell = document.createElement("td");
-
-  new_input = document.createElement("input");
-  new_input.id = `emailaddr_new`;
-
-  new_cell.appendChild(new_input);
-  add_row.appendChild(new_cell);
-
-
-  // submit button
-  const submit_cell = document.createElement("td");
-
-  const submit_button = document.createElement("button");
-  submit_button.setAttribute("onclick", "submit_new()");
-  submit_button.appendChild(document.createTextNode("Append"));
-  submit_cell.appendChild(submit_button);
-
-  add_row.appendChild(submit_cell);
-
-  new_table.appendChild(add_row);
-
-  // replace the HTML with the new formed table
-  students_list.replaceChildren(new_table);
-} // get_students()
-
-/* PUT part 1, turns all the text objects into text fields to edit.
-   passing "this" came from https://stackoverflow.com/a/6575272 and how to use "this" */
-async function student_edit(triggering_button) {
-  console.log(triggering_button);
-  const student_row_element = triggering_button.parentElement.parentElement;
-  const student_id = student_row_element.id;
-  // obtain previous values
-  const student_lastname = document.getElementById(`lastname_${student_id}`).innerText;
-  const student_firstname = document.getElementById(`firstname_${student_id}`).innerText;
-  const student_emailaddr = document.getElementById(`emailaddr_${student_id}`).innerText;
-
-  //alert(`Edit for ${student_id}!`);
-  // replace all the fields with text boxes to modify
-  student_row_element.replaceChildren();
-
-  const id_cell = document.createElement("td");
-  id_cell.appendChild(document.createTextNode(student_id));
-
-  student_row_element.appendChild(id_cell);
-
-  // create lastname field
-  let new_cell = document.createElement("td");
-
-  let new_input = document.createElement("input");
-  new_input.id = `lastname_${student_id}`;
-  new_input.value = student_lastname; // set the default value to the prev value
-
-  new_cell.appendChild(new_input);
-  student_row_element.appendChild(new_cell);
-
-  // create firstname field
-  new_cell = document.createElement("td");
-
-  new_input = document.createElement("input");
-  new_input.id = `firstname_${student_id}`;
-  new_input.value = student_firstname;
-
-  new_cell.appendChild(new_input);
-  student_row_element.appendChild(new_cell);
-
-  // create emailaddr field
-  new_cell = document.createElement("td");
-
-  new_input = document.createElement("input");
-  new_input.id = `emailaddr_${student_id}`;
-  new_input.value = student_emailaddr;
-
-  new_cell.appendChild(new_input);
-  student_row_element.appendChild(new_cell);
-
-
-  const submit_cell = document.createElement("td");
-
-  const submit_button = document.createElement("button");
-  submit_button.setAttribute("onclick", "submit_edits(this)");
-  submit_button.appendChild(document.createTextNode("Submit"));
-  submit_cell.appendChild(submit_button);
-
-  student_row_element.appendChild(submit_cell);
-
-} // student_edit(triggering_button)
-
-/* DELETE */
-async function student_delete(triggering_button) {
-  const student_row_element = triggering_button.parentElement.parentElement;
-  const student_id = student_row_element.id;
-  
-  
-  // double check if the user didn't accidentally click it
-  const confirmation = confirm(`Are you sure you want to delete student ${student_id}?`)
-
-  if (!confirmation) {
-    return true;
-  }
-
-  // send the delete req
-  const response = await fetch(`${server_url}/api/students/${student_id}`,
-    {
-      method: "DELETE",
-    }
-  );
-
-  // this shouldn't happen unless the front end is out of sync
-  if (response.status != 200) {
-    alert("Backend returned non-200 code!");
-    return false;
-  }
- 
-  return true;
-} // student_delete(triggering_button)
-
-/* PUT Part 2: Submission */
-async function submit_edits(triggering_button) {
-  const student_row_element = triggering_button.parentElement.parentElement;
-  const student_id = student_row_element.id;
-  //alert(`Submit Edit for ${student_id}!`);
-
-  const student_lastname = document.getElementById(`lastname_${student_id}`).value;
-  const student_firstname = document.getElementById(`firstname_${student_id}`).value;
-  const student_emailaddr = document.getElementById(`emailaddr_${student_id}`).value;
-
-  const response = await fetch(`${server_url}/api/students/${student_id}`,
-    {
-      method: "PUT",
-      // Source - https://stackoverflow.com/a/29823632
-      // Posted by Razor, modified by community. See post 'Timeline' for change history
-      // Retrieved 2026-10-20, License - CC BY-SA 4.0
-      headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        "lastname": student_lastname,
-        "firstname": student_firstname,
-        "emailaddr": student_emailaddr
-      }),
-    }
-  );
-
-  const res_txt = await response.text();
-
-  if (response.status != 200) {
-    alert(
-      `Non 200 error! Backend says...\n${res_txt}`
-    )
-    return false;
-  }
-
-  return true;
-} // submit_edits(triggering_button)
-
-/* POST submit the items in the N row as a new row. */
-async function submit_new() {
-  const student_lastname = document.getElementById("lastname_new").value;
-  const student_firstname = document.getElementById("firstname_new").value;
-  const student_emailaddr = document.getElementById("emailaddr_new").value;
-
-  const response = await fetch(`${server_url}/api/students/`,
-    {
-      method: "POST",
-      // Source - https://stackoverflow.com/a/29823632
-      // Posted by Razor, modified by community. See post 'Timeline' for change history
-      // Retrieved 2026-10-20, License - CC BY-SA 4.0
-      headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        "firstname": student_firstname,
-        "lastname": student_lastname,
-        "emailaddr": student_emailaddr
-      }),
-    }
-  );
-
-  const res_txt = await response.text();
-
-  if (response.status != 200) {
-    alert(
-      `Non 200 error! Backend says...\n${res_txt}`
-    )
-    return false;
-  }
-
-  // get the old table and append the new row just above the POST row
-
-  const current_table = document.getElementById("students-list").childNodes[0];
-
-  const new_json = `{"id": ${res_txt}, "lastname": "${student_lastname}", "firstname": "${student_firstname}", "emailaddr": "${student_emailaddr}"}`;
-
-  console.log(new_json);
-
-  student = JSON.parse(new_json);
-
-  const new_row = document.createElement("tr");
-  Object.keys(student).forEach((key) => {
-    // create a new cell per key
-    const new_cell = document.createElement("td");
-    new_cell.id = `${key}_${student["id"]}`; // will use this later for the edit button
-    if (key == "emailaddr") {
-      // handle the email and make it clickable
-      const link_element = document.createElement("a");
-      link_element.href = `mailto:${student[key]}`;
-      link_element.appendChild(document.createTextNode(student[key]));
-      new_cell.appendChild(link_element);
-    } else { // general case
-      //console.log(`${key}: ${student[key]}`);
-      new_cell.appendChild(document.createTextNode(student[key]));
-    }
-    new_row.appendChild(new_cell);
-  });
-
-  // append the options section cell at the end for CRUD operations
-  const new_cell = document.createElement("td");
-
-  // edit/PUT button
-  const edit_button = document.createElement("button");
-  edit_button.setAttribute("onclick", "student_edit(this)"); // set attribute is more consistent for non common items
-  edit_button.setAttribute("class", "edit"); // though ".class" didn't work for this and every element has class, so I'm not sure.
-  edit_button.appendChild(document.createTextNode("Edit"));
-  new_cell.appendChild(edit_button);
-  // DELETE button
-  const delete_button = document.createElement("button");
-  delete_button.setAttribute("onclick", "student_delete(this)"); // set attribute is more consistent for non common items
-  delete_button.setAttribute("class", "delete"); // though ".class" didn't work for this and every element has class, so I'm not sure.
-  delete_button.appendChild(document.createTextNode("Delete"));
-  new_cell.appendChild(delete_button);
-
-  // add the new cell to the row
-  new_row.appendChild(new_cell);
-  // add the new row, saving its corresponding ID
-  new_row.id = student["id"];
-
-  // Source - https://stackoverflow.com/a/5882802
-  // Posted by Felix Kling, modified by community. See post 'Timeline' for change history
-  // Retrieved 2026-11-18, License - CC BY-SA 4.0
-
-  table_children = current_table.childNodes;
-  current_table.insertBefore(new_row, table_children[table_children.length-1]);
-
-
-  return true;
-} // submit_new()
-
-async function select_single() {
-
-  const id = document.getElementById("single-student").value;
-
-  if (id === "") {
-    alert("Please enter a number!")
-    return false;
-  }
-
-  document.getElementById("single-student").value = "";
-
-  // get our students from the backend
-  const response = await fetch(`${server_url}/api/students/${id}`);
-
-  let student;
-  
-  try {
-    student = await response.json();
-    console.log(student);
-    student = student[0];
-  } catch (error) {
-    alert(`No student with ID ${id} found!`)
-    return false;
-  };
-
-  if (response.status != 200) { // if its returning a non 200 code, it's likely not running.
-    alert("Backend returned non-200 code. Is it running?");
-    return false;
-  }
-
-  if (document.getElementById(`id_${id}`)) {
-    alert("Student already in list!");
-    return false;
-  }
-
-  const current_table = document.getElementById("students-list").childNodes[0];
-
-  const new_row = document.createElement("tr");
-  Object.keys(student).forEach((key) => {
-    // create a new cell per key
-    const new_cell = document.createElement("td");
-    new_cell.id = `${key}_${student["id"]}`; // will use this later for the edit button
-    if (key == "emailaddr") {
-      // handle the email and make it clickable
-      const link_element = document.createElement("a");
-      link_element.href = `mailto:${student[key]}`;
-      link_element.appendChild(document.createTextNode(student[key]));
-      new_cell.appendChild(link_element);
-    } else { // general case
-      //console.log(`${key}: ${student[key]}`);
-      new_cell.appendChild(document.createTextNode(student[key]));
-    }
-    new_row.appendChild(new_cell);
-  });
-
-  // append the options section cell at the end for CRUD operations
-  const new_cell = document.createElement("td");
-
-  // edit/PUT button
-  const edit_button = document.createElement("button");
-  edit_button.setAttribute("onclick", "student_edit(this)"); // set attribute is more consistent for non common items
-  edit_button.setAttribute("class", "edit"); // though ".class" didn't work for this and every element has class, so I'm not sure.
-  edit_button.appendChild(document.createTextNode("Edit"));
-  new_cell.appendChild(edit_button);
-  // DELETE button
-  const delete_button = document.createElement("button");
-  delete_button.setAttribute("onclick", "student_delete(this)"); // set attribute is more consistent for non common items
-  delete_button.setAttribute("class", "delete"); // though ".class" didn't work for this and every element has class, so I'm not sure.
-  delete_button.appendChild(document.createTextNode("Delete"));
-  new_cell.appendChild(delete_button);
-
-  // add the new cell to the row
-  new_row.appendChild(new_cell);
-  // add the new row, saving its corresponding ID
-  new_row.id = student["id"];
-
-  // Source - https://stackoverflow.com/a/5882802
-  // Posted by Felix Kling, modified by community. See post 'Timeline' for change history
-  // Retrieved 2026-11-18, License - CC BY-SA 4.0
-
-  table_children = current_table.childNodes;
-  current_table.insertBefore(new_row, table_children[table_children.length-1]);
-
+const server_url = "http://127.0.0.1:3002";
+
+// Present API and validation feedback without blocking the rest of the interface.
+function showToast(message, type = "success") {
+  const toastElement = document.getElementById("app-toast");
+  document.getElementById("toast-message").textContent = message;
+  toastElement.classList.toggle("text-bg-danger", type === "danger");
+  toastElement.classList.toggle("text-bg-success", type === "success");
+  bootstrap.Toast.getOrCreateInstance(toastElement).show();
 }
+
+function setLoading() {
+  document.getElementById("students-list").innerHTML = '<div class="empty-state"><div class="spinner-border text-primary" role="status"></div></div>';
+  document.getElementById("record-count").textContent = "Loading records...";
+}
+
+// Escape API values before inserting them into generated table HTML.
+function escapeHtml(value) {
+  const span = document.createElement("span");
+  span.textContent = value;
+  return span.innerHTML;
+}
+
+function studentRow(student) {
+  return `<tr id="${student.id}">
+    <td><span class="id-badge">#${escapeHtml(student.id)}</span></td>
+    <td class="fw-semibold" id="lastname_${student.id}">${escapeHtml(student.lastname)}</td>
+    <td id="firstname_${student.id}">${escapeHtml(student.firstname)}</td>
+    <td id="emailaddr_${student.id}"><a class="email-link" href="mailto:${escapeHtml(student.emailaddr)}">${escapeHtml(student.emailaddr)}</a></td>
+    <td><div class="d-flex justify-content-end gap-2">
+      <button class="btn btn-sm btn-edit" type="button" onclick="student_edit(this)" title="Edit student"><i class="bi bi-pencil"></i><span class="d-none d-xl-inline ms-1">Edit</span></button>
+      <button class="btn btn-sm btn-delete" type="button" onclick="student_delete(this)" title="Delete student"><i class="bi bi-trash"></i><span class="d-none d-xl-inline ms-1">Delete</span></button>
+    </div></td>
+  </tr>`;
+}
+
+// Render either an empty state or the responsive Bootstrap student table.
+function renderTable(students) {
+  document.getElementById("students-list").innerHTML = students.length
+    ? `<table class="table align-middle mb-0"><thead><tr><th>ID</th><th>Last name</th><th>First name</th><th>Email address</th><th class="text-end">Actions</th></tr></thead><tbody>${students.map(studentRow).join("")}</tbody></table>`
+    : '<div class="empty-state"><i class="bi bi-person-x"></i><h3 class="h6 mt-3">No students found</h3><p class="text-secondary mb-0">Add a student or refresh the directory.</p></div>';
+  document.getElementById("record-count").textContent = `${students.length} ${students.length === 1 ? "record" : "records"}`;
+}
+
+async function get_students() {
+  setLoading();
+  try {
+    const response = await fetch(`${server_url}/api/students`);
+    if (!response.ok) throw new Error("The backend returned an error.");
+    renderTable(await response.json());
+  } catch (error) {
+    document.getElementById("students-list").innerHTML = '<div class="empty-state"><i class="bi bi-cloud-slash"></i><h3 class="h6 mt-3">Could not load students</h3><p class="text-secondary mb-0">Make sure the API server is running on port 3002.</p></div>';
+    document.getElementById("record-count").textContent = "Connection unavailable";
+  }
+}
+
+// A single-record search replaces the table instead of adding a duplicate row.
+async function select_single() {
+  const input = document.getElementById("single-student");
+  const id = input.value.trim();
+  if (!id) return showToast("Enter a student ID.", "danger");
+  try {
+    const response = await fetch(`${server_url}/api/students/${encodeURIComponent(id)}`);
+    if (response.status === 404) return showToast(`Student ${id} was not found.`, "danger");
+    if (!response.ok) throw new Error("Could not fetch the student.");
+    const result = await response.json();
+    const student = Array.isArray(result) ? result[0] : result;
+    renderTable([student]);
+  } catch (error) {
+    showToast(error.message || "Student not found.", "danger");
+  } finally {
+    input.value = "";
+  }
+}
+
+function student_edit(button) {
+  const row = button.closest("tr");
+  const id = row.id;
+  const lastname = document.getElementById(`lastname_${id}`).textContent;
+  const firstname = document.getElementById(`firstname_${id}`).textContent;
+  const email = document.getElementById(`emailaddr_${id}`).textContent;
+  row.innerHTML = `<td><span class="id-badge">#${escapeHtml(id)}</span></td>
+    <td><input class="form-control form-control-sm" id="lastname_${id}" value="${escapeHtml(lastname)}" required /></td>
+    <td><input class="form-control form-control-sm" id="firstname_${id}" value="${escapeHtml(firstname)}" required /></td>
+    <td><input class="form-control form-control-sm" id="emailaddr_${id}" type="email" value="${escapeHtml(email)}" required /></td>
+    <td><div class="d-flex justify-content-end gap-2"><button class="btn btn-sm btn-success" type="button" onclick="submit_edits(this)"><i class="bi bi-check-lg"></i><span class="d-none d-xl-inline ms-1">Save</span></button><button class="btn btn-sm btn-light border" type="button" onclick="get_students()"><i class="bi bi-x-lg"></i></button></div></td>`;
+  document.getElementById(`lastname_${id}`).focus();
+}
+
+// PUT all editable fields and refresh the directory only after a successful response.
+async function submit_edits(button) {
+  const id = button.closest("tr").id;
+  const body = {
+    lastname: document.getElementById(`lastname_${id}`).value.trim(),
+    firstname: document.getElementById(`firstname_${id}`).value.trim(),
+    emailaddr: document.getElementById(`emailaddr_${id}`).value.trim()
+  };
+  if (!body.lastname || !body.firstname || !body.emailaddr) return showToast("Complete all student fields.", "danger");
+  try {
+    const response = await fetch(`${server_url}/api/students/${encodeURIComponent(id)}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    if (!response.ok) throw new Error(await response.text());
+    showToast("Student updated.");
+    await get_students();
+  } catch (error) {
+    showToast(error.message || "Could not update the student.", "danger");
+  }
+}
+
+// Confirm destructive actions before issuing the DELETE request.
+async function student_delete(button) {
+  const id = button.closest("tr").id;
+  if (!confirm(`Delete student #${id}?`)) return;
+  try {
+    const response = await fetch(`${server_url}/api/students/${encodeURIComponent(id)}`, { method: "DELETE" });
+    if (!response.ok) throw new Error(await response.text());
+    showToast("Student deleted.");
+    await get_students();
+  } catch (error) {
+    showToast(error.message || "Could not delete the student.", "danger");
+  }
+}
+
+// POST a validated new student, then refresh the list and close the add panel.
+async function submit_new() {
+  const body = {
+    firstname: document.getElementById("firstname_new").value.trim(),
+    lastname: document.getElementById("lastname_new").value.trim(),
+    emailaddr: document.getElementById("emailaddr_new").value.trim()
+  };
+  if (!body.firstname || !body.lastname || !body.emailaddr) return showToast("Complete all student fields.", "danger");
+  try {
+    const response = await fetch(`${server_url}/api/students`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    if (!response.ok) throw new Error(await response.text());
+    document.getElementById("new-student-form").reset();
+    bootstrap.Collapse.getOrCreateInstance(document.getElementById("addStudent")).hide();
+    showToast("Student created.");
+    await get_students();
+  } catch (error) {
+    showToast(error.message || "Could not create the student.", "danger");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("new-student-form").addEventListener("submit", event => {
+    event.preventDefault();
+    submit_new();
+  });
+  get_students();
+});
