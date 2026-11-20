@@ -9,8 +9,7 @@ const mysql = require("mysql2");
 /* DATABASE SETUP */
 /* -------------- */
 
-
-// Create the Database
+// Connect to MySQL and create the database and table when they do not exist.
 let con = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -42,7 +41,7 @@ con.connect(function(err) {
 app.use(express.json());
 app.use(cors());
 
-// Validation for Students JOI Side
+// Validate every create and update payload before it reaches the database.
 function validate_student(student) {
   const schema = Joi.object({
     lastname: Joi.string().required(),

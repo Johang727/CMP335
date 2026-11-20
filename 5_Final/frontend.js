@@ -1,5 +1,6 @@
 const server_url = "http://127.0.0.1:3002";
 
+// Present API and validation feedback without blocking the rest of the interface.
 function showToast(message, type = "success") {
   const toastElement = document.getElementById("app-toast");
   document.getElementById("toast-message").textContent = message;
@@ -13,6 +14,7 @@ function setLoading() {
   document.getElementById("record-count").textContent = "Loading records...";
 }
 
+// Escape API values before inserting them into generated table HTML.
 function escapeHtml(value) {
   const span = document.createElement("span");
   span.textContent = value;
@@ -32,6 +34,7 @@ function studentRow(student) {
   </tr>`;
 }
 
+// Render either an empty state or the responsive Bootstrap student table.
 function renderTable(students) {
   document.getElementById("students-list").innerHTML = students.length
     ? `<table class="table align-middle mb-0"><thead><tr><th>ID</th><th>Last name</th><th>First name</th><th>Email address</th><th class="text-end">Actions</th></tr></thead><tbody>${students.map(studentRow).join("")}</tbody></table>`
@@ -51,6 +54,7 @@ async function get_students() {
   }
 }
 
+// A single-record search replaces the table instead of adding a duplicate row.
 async function select_single() {
   const input = document.getElementById("single-student");
   const id = input.value.trim();
@@ -83,6 +87,7 @@ function student_edit(button) {
   document.getElementById(`lastname_${id}`).focus();
 }
 
+// PUT all editable fields and refresh the directory only after a successful response.
 async function submit_edits(button) {
   const id = button.closest("tr").id;
   const body = {
@@ -101,6 +106,7 @@ async function submit_edits(button) {
   }
 }
 
+// Confirm destructive actions before issuing the DELETE request.
 async function student_delete(button) {
   const id = button.closest("tr").id;
   if (!confirm(`Delete student #${id}?`)) return;
@@ -114,6 +120,7 @@ async function student_delete(button) {
   }
 }
 
+// POST a validated new student, then refresh the list and close the add panel.
 async function submit_new() {
   const body = {
     firstname: document.getElementById("firstname_new").value.trim(),
